@@ -8,6 +8,8 @@ Non-assignment command: just <command> (eg sum), getValue returns 0, hasValue() 
 
 User can then compare the command string or value integer in the callback function to dictate further actions.
 
+New Line and Carriage Return from the Serial Monitor will be filtered out so no need to fiddle with the Serial Monitor line ending settings
+
 # Installation
 Download the codes, unzip it, copy `SerialConfigCommand` folder into your Arduino library folder, for example `C:\Users\you\Documents\Arduino\libraries`.
 
