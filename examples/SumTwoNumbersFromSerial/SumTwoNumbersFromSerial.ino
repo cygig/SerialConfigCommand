@@ -22,7 +22,7 @@
   * Non-assignment command: just <command> (eg sum), getValue returns 0, hasValue() returns false.
   */
 
-#include "SerialConfigCommand.h"
+#include <SerialConfigCommand.h>
 
 int A=0, B=0, result;
 
