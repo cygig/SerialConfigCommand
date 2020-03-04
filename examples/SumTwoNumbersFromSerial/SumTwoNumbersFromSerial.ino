@@ -13,6 +13,8 @@
  * 
  * Type "sum" without quotes, press Enter.
  * "10 + 20 = 30" should echo back.
+ * 
+ * Note: New Line and Carriage Return from the Serial Monitor will be filtered out so no need to fiddle with the Serial Monitor line ending settings.
  */
 
  /* - Types of Commands -
@@ -22,7 +24,7 @@
   * Non-assignment command: just <command> (eg sum), getValue returns 0, hasValue() returns false.
   */
 
-#include <SerialConfigCommand.h>
+#include "SerialConfigCommand.h"
 
 int A=0, B=0, result;
 
