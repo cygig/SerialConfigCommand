@@ -1,5 +1,5 @@
 # SerialConfigCommand
-SerialConfigCommand allows user to issue commands, with or without values via the Serial Monitor easily. Example: "LED=255", "Lock=1", "Start". Uses Arduino String() class instead of character array, which will be useful for beginners.
+SerialConfigCommand for Arduino allows user to issue commands, with or without values via the Serial Monitor easily. Example: "LED=255", "Lock=1", "Start". Uses Arduino String() class instead of character array, which will be useful for beginners.
 The library checks the Serial buffer every x interval defined by the user, and parse the input into commands and values.
 
 Users can enter an assigment or non-assigment command.
