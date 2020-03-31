@@ -17,20 +17,18 @@
  * Note: New Line and Carriage Return from the Serial Monitor will be filtered out so no need to fiddle with the Serial Monitor line ending settings.
  */
 
- /* - Types of Commands -
+ /* - Types of Settings -
   *  
-  * Users can enter an assigment or non-assigment command.
-  * Assignment command: <command>=<value> (eg num1=10). 
-  * Non-assignment command: just <command> (eg sum), getValue returns 0, hasValue() returns false.
+  * Users can enter an assigment or non-assigment setting.
+  * Assignment setting: <command>=<value> (eg num1=10). 
+  * Non-assignment setting: just <command> (eg sum), hasValue() returns false.
   */
 
-#include "SerialConfigCommand.h"
+#include <SerialConfigCommand.h>
 
 int A=0, B=0, result;
 
 SerialConfigCommand scc; //Define an instance of SerialConfigCommand
-
-
 
 void setup() {
   
@@ -46,32 +44,32 @@ void setup() {
 
 
 void loop() {
-  
   scc.update(); // Remember to put update() in loop()
-  
 }
-
 
 
 void respond(){ // Callback function
   
   // You must ensure user entered an assignment value with command, ie "num1=10" not "num1"
   // Thus check with scc.hasValue()  
-  
-  if (scc.getCmd()=="num1" && scc.hasValue()){ 
+
+  // You can compare using Arduino Strings
+  if (scc.getCmdS()=="num1" && scc.hasValue()){ 
     A = scc.getValueInt();    
-    Serial.println("First number is " + scc.getValue());
+    Serial.println("First number is " + scc.getValueS());
   }
 
-  else if (scc.getCmd()=="num2" && scc.hasValue()){
+  // Or use C-string and strcmp function
+  else if ( strcmp(scc.getCmd(), "num2")==0 && scc.hasValue() ){
     B = scc.getValueInt(); 
-    Serial.println("Second number is " + scc.getValue());   
+    Serial.print("Second number is ");
+    Serial.println(scc.getValue());   
   }
 
   // In this case, need to check for non-assignment command with no value, ie "sum" not "sum=1"
   // Thus check with !scc.hasValue()  
   
-  else if (scc.getCmd()=="sum" && !scc.hasValue()){
+  else if (scc.getCmdS()=="sum" && !scc.hasValue()){
     result = A+B;
     Serial.println(String(A) + " + " + String(B) + " = " + result);    
   }

@@ -17,6 +17,10 @@ Checks by comparing Strings and Int can be done in the callback function using t
  #include "WProgram.h"
 #endif
 
+#define READ_CMD 0
+#define READ_VALUE 1
+#define CMD_SIZE 32
+#define VALUE_SIZE 16
 
 class SerialConfigCommand {
   
@@ -30,11 +34,17 @@ class SerialConfigCommand {
   	void enable();
   	void update();
 	  void setInterval(unsigned long myPeriod);
-    String getCmd();
-    String getValue();
+   
+    char* getCmd();
+    String getCmdS();
+    
+    char* getValue();
+    String getValueS();
     int getValueInt();
+    float getValueFloat();
     bool hasValue();
-
+    
+    bool readSetting();
     
 
   private:
@@ -42,13 +52,12 @@ class SerialConfigCommand {
     bool active;
     unsigned long timer;
     unsigned long period;
-    String trimNLCR (String input);
-    void parseCmd(String input);
-    void clearSetting();
-    String cmd="";
-    String value="";
-    int valueInt=0; // Stores the int version of the string 
-    bool cmdHasValue=false; // Decides if the command is assigment(has value) or non-assignment(no value)
+    
+    char cmd[CMD_SIZE];
+    char value[VALUE_SIZE];
+    
+    bool concatCmdValue(char myChar);
+    bool readMode=READ_CMD; 
     
     
 };

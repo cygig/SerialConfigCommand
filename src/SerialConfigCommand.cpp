@@ -4,6 +4,8 @@ SerialConfigCommand::SerialConfigCommand(){
 // Empty Constructor
 }
 
+
+
 void SerialConfigCommand::set(void (*myFunction)()){
   // Assigns user input into privates
   active = true;
@@ -11,6 +13,8 @@ void SerialConfigCommand::set(void (*myFunction)()){
   period = 300; //Defaults to 300ms if period is not set
   callback_Function = myFunction; 
 }
+
+
 
 void SerialConfigCommand::set(unsigned long myPeriod,void (*myFunction)()){
   // Assigns user input into privates
@@ -56,27 +60,49 @@ void SerialConfigCommand::setInterval(unsigned long myPeriod){
 
 
 
-String SerialConfigCommand::getCmd(){
+char* SerialConfigCommand::getCmd(){
   return cmd;  
 }
 
 
 
-String SerialConfigCommand::getValue(){
+String SerialConfigCommand::getCmdS(){
+  return cmd;  
+}
+
+
+
+char* SerialConfigCommand::getValue(){
+  return value;  
+}
+
+
+
+String SerialConfigCommand::getValueS(){
   return value;  
 }
 
 
 
 int SerialConfigCommand::getValueInt(){
-  return valueInt;  
+  return atoi(value);
+}
+
+
+
+float SerialConfigCommand::getValueFloat(){
+  return atof(value);
 }
 
 
 
 bool SerialConfigCommand::hasValue(){
-  return cmdHasValue;  
+
+  // if the first char is NULL, then it has no value
+  if (value[0]=='\0'){  return false; }
+  else{ return true; }  
 }
+
 
 
 void SerialConfigCommand::update(){
@@ -84,24 +110,9 @@ void SerialConfigCommand::update(){
   // Make sure active and timer overflowed millis()
   if ( active && ((unsigned long)(millis()-timer) >= period) ) {
 
-    // Do not check for input if nothing is available on Serial
+    // Read in the setting if Serial is available
     if (Serial.available() > 0){
-      
-      // Reset all settings to default 
-      clearSetting();
-      
-      // Empty string to store incoming message
-      String msg = "";
-
-      // Convert each incoming btye to char and add to string till no longer avail
-      while (Serial.available()){
-        msg += char(Serial.read());
-      }
-      
-      // Parse msg then executes user specified function (ie do stuff on certain commands or values)
-      parseCmd(msg);
-      callback_Function();
-
+      readSetting();
     }
     
 	  timer = millis(); // Reset timer
@@ -111,71 +122,78 @@ void SerialConfigCommand::update(){
 
 
 
-String SerialConfigCommand::trimNLCR(String input){
-  // Find positions of NL and CR, -1 if no string found
-  int CR = input.indexOf("\r");
-  int LN = input.indexOf("\n");
+bool SerialConfigCommand::readSetting(){ // Function
+// Read this flowchart for a better idea:
+// https://drive.google.com/file/d/1MnBnaXLNSj7eUdXP4UXzL1iaxye_j8Mg/view?usp=sharing
+// You will can open the file with draw.io or app.diagrams.net
+// An image copy is also included in the source code
 
-  // If both found, delete two chars
-  if (CR>=1 && LN >=1) {
-    //Serial.println("Trimmed CR and LN");
-    return input.substring(0, input.length()-2);
+  // Only initialise if there is data in Serial buffer
+  if (Serial.available()>0){
+    cmd[0] = '\0';
+    value[0] = '\0';
+    readMode = READ_CMD;
   }
 
-  // If only one found, delete one char
-  else if (CR>=1 || LN >=1){
-    //Serial.println("Trimmed CR or LN");
-    return input.substring(0, input.length()-1); 
-  }
-
-  // If none found, just return the original string
-  else {
-    return input;
-  } 
-
-  /* Substring Reference
-   * 0 1 2 3 4 5 6 7
-   * H E L L O r n
-   * len=7
-   */
-}
-
-
-
-void SerialConfigCommand::parseCmd(String input){
-    // Find the position of the equal sign
-    int sep = input.indexOf("=");
-
-    // If there is an equal sign, assign command and value    
-    if (sep>0){
-      input=trimNLCR(input); // Trim away NL and RC from serial monitor
-      cmd=input.substring(0, sep); //Extract part from beginning before equal sign
-      
-      int len = input.length(); // Find the length of input
-      value = input.substring(sep+1, len); // Extract the part from equal sign to end
-      
-      valueInt = value.toInt(); //value but in int
-      
-      cmdHasValue=true; //Indicate this command has value;
-    } 
-
-    // if not, command is the the input after trimming. Value remainds default(0).
-    else {
-      cmd=trimNLCR(input);
-    }
+  while (Serial.available()>0){ // 1 While
     
-/* Substring Reference
- *  0 1 2 3 4 5 6 7 8
- *  H E L L 0 = 1 0
- *  len=8, sep=5  
- */ 
-}
+    char myChar = Serial.read();
+
+    if (Serial.available()<=0){ // 2 If
+
+      if (myChar!='\n' && myChar!='\r'){ //3 If
+        concatCmdValue(myChar); }  // 3 If
+        
+      callback_Function();
+      return 1;  
+       
+    } // 2 If
+
+    else { // 2 Else
+      
+      if (myChar=='\n' || myChar=='\r'){ // 3 If
+        while ( Serial.available()>0 ){ Serial.read(); }
+        callback_Function();
+        return 1;
+      } // 3 If
+  
+      else if (myChar=='='){ // 3 Else If
+        readMode=READ_VALUE;
+        continue;
+      } // 3 Else If
+  
+      else{ // 3 Else
+        if( concatCmdValue(myChar) ){ continue; }
+        else{ return 0; }
+      } // 3 Else
+      
+    } // 2 Else
+  } // 1 While
+
+  return 0;
+}// Function
 
 
-// Resets everything to default
-void SerialConfigCommand::clearSetting(){
-  cmd="";
-  value="";
-  valueInt=0;
-  cmdHasValue=false;
-}
+
+bool SerialConfigCommand::concatCmdValue(char myChar){ // Function
+  if (readMode==READ_CMD){ // 1 If
+    byte L = strlen(cmd);
+    if (L<sizeof(cmd)-2){ // 2 If
+      cmd[L] = myChar;
+      cmd[L+1] = '\0';
+    } // 2 If
+    else{ return 0; }
+  } // 1 If
+
+  else{ // 1 Else
+    byte L = strlen(value);
+    if (L < sizeof(value)){ // 2 If
+      value[L] = myChar;
+      value[L+1] = '\0';
+    } // 2 If
+    else{  return 0; }
+  } // 1 Else
+
+  return 1;
+
+} // Function
