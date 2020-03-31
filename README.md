@@ -97,7 +97,7 @@ This calls the function the read and parse the data in the Serial buffer once. T
 # Flowcharts
 To understand how the library read the settings, refer to the flowchart below.
 
-![image](flowchart\SerialConfigCommand%20Read%20Setting_Page_1)
-![image](flowchart\SerialConfigCommand%20Read%20Setting_Page_2)
+![image](flowchart\SerialConfigCommand%20Read%20Setting_Page_1.jpg)
+![image](flowchart\SerialConfigCommand%20Read%20Setting_Page_2.jpg)
 
 ---
