@@ -16,8 +16,11 @@ Only use common ANSI characters (those you see on a standard QWERTY keyboard) wi
 ---
 
 # Update Notes
-v0.5
-For the new version, `getCmd()` and `getValue()` will return C-string instead of Arduino String. To access Arduino String, `use getCmdS()` or `getValueS()`.
+- v0.6
+  - Corrected an error in callback function declaration. Declared it as returning void instead of nothing.
+  
+- v0.5
+  - For the new version, `getCmd()` and `getValue()` will return C-string instead of Arduino String. To access Arduino String, `use getCmdS()` or `getValueS()`.
 
 ---
 

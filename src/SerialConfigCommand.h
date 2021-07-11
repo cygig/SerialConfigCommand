@@ -48,7 +48,7 @@ class SerialConfigCommand {
     
 
   private:
-    (*callback_Function)(); 
+    void (*callback_Function)(); 
     bool active;
     unsigned long timer;
     unsigned long period;
