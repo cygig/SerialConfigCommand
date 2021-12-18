@@ -16,6 +16,10 @@ Only use common ANSI characters (those you see on a standard QWERTY keyboard) wi
 ---
 
 # Update Notes
+- v0.7.0
+  - Added `isCmd()` function so users need not use `strcmp()` when checking the command name.
+  - Changed to semantic-like versioning.
+  
 - v0.6
   - Corrected an error in callback function declaration. Declared it as returning void instead of nothing.
   
