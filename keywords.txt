@@ -7,6 +7,7 @@ update			KEYWORD2
 setInterval		KEYWORD2
 getCmd			KEYWORD2
 getCmdS			KEYWORD2
+isCmd			KEYWORD2
 getValue		KEYWORD2
 getValueS		KEYWORD2
 getValueInt		KEYWORD2

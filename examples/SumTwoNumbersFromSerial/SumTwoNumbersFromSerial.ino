@@ -53,7 +53,7 @@ void respond(){ // Callback function
   // You must ensure user entered an assignment value with command, ie "num1=10" not "num1"
   // Thus check with scc.hasValue()  
 
-  // You can compare using Arduino Strings
+  // You can compare using Arduino Strings using ==
   if (scc.getCmdS()=="num1" && scc.hasValue()){ 
     A = scc.getValueInt();    
     Serial.println("First number is " + scc.getValueS());
@@ -66,10 +66,10 @@ void respond(){ // Callback function
     Serial.println(scc.getValue());   
   }
 
+  // You can also use isCmd() to check C-strings. Returns true if string and command matches.
   // In this case, need to check for non-assignment command with no value, ie "sum" not "sum=1"
   // Thus check with !scc.hasValue()  
-  
-  else if (scc.getCmdS()=="sum" && !scc.hasValue()){
+  else if (scc.isCmd("sum") && !scc.hasValue()){
     result = A+B;
     Serial.println(String(A) + " + " + String(B) + " = " + result);    
   }

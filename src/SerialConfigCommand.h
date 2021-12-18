@@ -1,5 +1,6 @@
 /*
-SerialConfigCommand 0.4 by cygig
+SerialConfigCommand 0.7.0 by cygig
+
 SerialConfigCommand is an easy way to adjust configurations via the Serial monitor. 
 The library checks the Serial buffer every x interval defined by the user, and parse the input into commands and values.
 Users can enter an assigment or non-assigment command.
@@ -37,6 +38,7 @@ class SerialConfigCommand {
    
     char* getCmd();
     String getCmdS();
+    bool isCmd(char* myCmd);
     
     char* getValue();
     String getValueS();

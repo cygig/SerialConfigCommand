@@ -77,6 +77,9 @@ Returns a C-string of the current command.
 ## _String_ getCmdS()
 Returns a Arduino String of the current command.
 
+## _bool_ isCmd(_char*_ myCmd)
+Compares `myCmd` with the current command, returns `true` if the are the same, `false` if not. `myCmd` must be a C-string.
+
 ## _char*_ getValue()
 Returns a C-string of the value of the current command.
 
@@ -100,7 +103,7 @@ This calls the function the read and parse the data in the Serial buffer once. T
 # Flowcharts
 In lieu of commands, the flowcharts below will explain the process of reading and parsing settings from the Serial buffer.
 
-![image](flowchart/SerialConfigCommand%20Read%20Setting_Page_1.jpg)
-![image](flowchart/SerialConfigCommand%20Read%20Setting_Page_2.jpg)
+![image](extras/SerialConfigCommand%20Read%20Setting_Page_1.jpg)
+![image](extras/SerialConfigCommand%20Read%20Setting_Page_2.jpg)
 
 ---

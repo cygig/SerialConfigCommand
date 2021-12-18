@@ -1,3 +1,14 @@
+/*
+SerialConfigCommand 0.7.0 by cygig
+
+SerialConfigCommand is an easy way to adjust configurations via the Serial monitor. 
+The library checks the Serial buffer every x interval defined by the user, and parse the input into commands and values.
+Users can enter an assigment or non-assigment command.
+Assignment command: <command>=<value> (eg num1=10). 
+Non-assignment command: just <command> (eg sum), getValue returns 0, hasValue() returns false.
+Checks by comparing Strings and Int can be done in the callback function using the parsed commands and values to dictate further actions.
+*/
+
 #include "SerialConfigCommand.h"
 
 SerialConfigCommand::SerialConfigCommand(){
@@ -68,6 +79,13 @@ char* SerialConfigCommand::getCmd(){
 
 String SerialConfigCommand::getCmdS(){
   return cmd;  
+}
+
+
+
+bool SerialConfigCommand::isCmd(char* myCmd){
+  if ( strcmp(cmd, myCmd) == 0 ) return true;
+  else return false;
 }
 
 
